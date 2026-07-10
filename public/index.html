@@ -96,6 +96,31 @@
   .state .sub { font-size: 13px; margin-top: 8px; color: var(--haze); }
   .error-box { padding: 24px; border: 1px solid var(--flamingo); border-radius: 12px; color: #FF9AC5; }
 
+  /* ── Affiliate section ── */
+  .shop { max-width: 860px; margin: 0 auto; padding: 20px clamp(16px,5vw,48px) 40px; }
+  .shop h2 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: .06em; margin-bottom: 6px; }
+  .shop .lede { font-size: 14px; color: var(--haze); margin-bottom: 22px; }
+  .preorder {
+    display: block; text-decoration: none; text-align: center;
+    background: linear-gradient(120deg, var(--flamingo), #8A2BE2);
+    color: #fff; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900;
+    font-size: 22px; letter-spacing: .06em; padding: 18px; border-radius: 14px; margin-bottom: 28px;
+    box-shadow: 0 0 30px rgba(255,46,136,.35); transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .preorder:hover { transform: translateY(-2px); box-shadow: 0 0 44px rgba(255,46,136,.55); }
+  .preorder small { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: .1em; opacity: .85; margin-top: 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+  .buy {
+    display: flex; flex-direction: column; justify-content: space-between; text-decoration: none;
+    background: var(--card); border: 1px solid var(--edge); border-radius: 14px; padding: 18px;
+    transition: transform .18s ease, border-color .18s ease; min-height: 128px;
+  }
+  .buy:hover { transform: translateY(-3px); border-color: var(--cyan); }
+  .buy .kind { font-size: 10px; letter-spacing: .2em; color: var(--cyan); font-weight: 700; }
+  .buy .name { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 20px; color: var(--ink); margin-top: 6px; line-height: 1.1; }
+  .buy .cta { font-size: 12px; color: var(--sunset); letter-spacing: .1em; margin-top: 14px; }
+  .disclosure { font-size: 11px; color: var(--haze); margin-top: 20px; line-height: 1.6; opacity: .8; }
+
   footer { border-top: 1px solid var(--card); padding: 26px 16px; text-align: center; font-size: 12px; color: var(--haze); line-height: 1.8; }
 </style>
 </head>
@@ -122,6 +147,37 @@
       <div class="state"><div class="big">LOADING THE WIRE…</div><div class="sub">pulling the latest GTA VI news</div></div>
     </div>
   </main>
+
+  <section class="shop">
+    <h2>GET READY FOR LAUNCH</h2>
+    <p class="lede">Everything you need for day one — pre-order the game and gear up.</p>
+
+    <a class="preorder" href="PASTE_YOUR_PREORDER_LINK_HERE" target="_blank" rel="noopener sponsored">
+      PRE-ORDER GTA VI
+      <small>Reserve your copy for November 19 →</small>
+    </a>
+
+    <div class="grid">
+      <a class="buy" href="PASTE_YOUR_PS5_LINK_HERE" target="_blank" rel="noopener sponsored">
+        <div><div class="kind">CONSOLE</div><div class="name">PlayStation 5</div></div>
+        <div class="cta">Check price →</div>
+      </a>
+      <a class="buy" href="PASTE_YOUR_XBOX_LINK_HERE" target="_blank" rel="noopener sponsored">
+        <div><div class="kind">CONSOLE</div><div class="name">Xbox Series X</div></div>
+        <div class="cta">Check price →</div>
+      </a>
+      <a class="buy" href="PASTE_YOUR_HEADSET_LINK_HERE" target="_blank" rel="noopener sponsored">
+        <div><div class="kind">ACCESSORY</div><div class="name">Gaming Headset</div></div>
+        <div class="cta">Check price →</div>
+      </a>
+      <a class="buy" href="PASTE_YOUR_CONTROLLER_LINK_HERE" target="_blank" rel="noopener sponsored">
+        <div><div class="kind">ACCESSORY</div><div class="name">Extra Controller</div></div>
+        <div class="cta">Check price →</div>
+      </a>
+    </div>
+
+    <p class="disclosure">As an Amazon Associate, VICEWIRE earns from qualifying purchases. Links above are affiliate links — you pay the same price, and a small commission helps keep the wire running.</p>
+  </section>
 
   <footer>
     VICEWIRE is a fan-made tracker. Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive.<br />
