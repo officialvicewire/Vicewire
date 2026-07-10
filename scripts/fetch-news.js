@@ -19,7 +19,7 @@ async function fetchGTA6News() {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-1',
+        model: 'claude-sonnet-4-5',
         max_tokens: 2000,
         messages: [
           {
@@ -29,7 +29,7 @@ async function fetchGTA6News() {
 Return ONLY a raw JSON array (no markdown, no preamble). Each item must have exactly these fields:
 {
   "title": "headline in your own words",
-  "summary": "2-3 sentences, fully paraphrased",
+  "summary": "2-3 sentences, fully paraphrased in your own words, never copied from the source",
   "source": "publication name",
   "date": "MMM D, YYYY format",
   "tag": "one of: OFFICIAL, NEWS, RUMOR, BUSINESS"
@@ -40,14 +40,19 @@ Order newest first. Return ONLY the JSON array, nothing else.`,
         ],
         tools: [
           {
-            type: 'builtin_tools',
+            type: 'web_search_20250305',
             name: 'web_search',
+            max_uses: 5,
           },
         ],
       }),
     });
 
     const data = await response.json();
+
+    if (data.error) {
+      throw new Error(`API error: ${JSON.stringify(data.error)}`);
+    }
 
     if (!data.content) {
       throw new Error('No content in response');
@@ -77,7 +82,7 @@ Order newest first. Return ONLY the JSON array, nothing else.`,
     }
 
     fs.writeFileSync(NEWS_FILE, JSON.stringify(newsArray, null, 2));
-    console.log(`✓ Updated ${NEWS_FILE} with ${newsArray.length} items`);
+    console.log(`Updated ${NEWS_FILE} with ${newsArray.length} items`);
   } catch (error) {
     console.error('Error fetching news:', error.message);
     process.exit(1);
