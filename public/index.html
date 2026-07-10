@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VICEWIRE — Unofficial GTA VI Tracker</title>
+<meta name="description" content="Live countdown and the latest Grand Theft Auto VI news, updated daily." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --midnight: #0A0A1F;
+    --card: #14142E;
+    --edge: #1F1F44;
+    --flamingo: #FF2E88;
+    --cyan: #00E5FF;
+    --sunset: #FFB347;
+    --haze: #B9B3D9;
+    --ink: #F5F0FF;
+  }
+  body {
+    background: var(--midnight);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+  }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulseNeon {
+    0%,100% { text-shadow: 0 0 18px rgba(255,46,136,.85), 0 0 60px rgba(255,46,136,.35); }
+    50% { text-shadow: 0 0 26px rgba(255,46,136,1), 0 0 90px rgba(255,46,136,.5); }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  header.masthead {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 20px clamp(16px,5vw,48px); border-bottom: 1px solid var(--card);
+  }
+  .logo { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: .08em; }
+  .logo span { color: var(--flamingo); }
+  .tagline { font-size: 11px; color: var(--haze); letter-spacing: .2em; }
+
+  section.hero {
+    position: relative; text-align: center;
+    padding: clamp(48px,9vw,96px) 16px 110px; overflow: hidden;
+    border-bottom: 1px solid var(--card);
+  }
+  .sun {
+    position: absolute; left: 50%; bottom: -40px; transform: translateX(-50%);
+    width: 340px; height: 340px; border-radius: 50%;
+    background: linear-gradient(180deg,var(--sunset) 0%,var(--flamingo) 55%,#8A2BE2 100%);
+    -webkit-mask-image: repeating-linear-gradient(180deg, black 0 26px, transparent 26px 34px);
+    mask-image: repeating-linear-gradient(180deg, black 0 26px, transparent 26px 34px);
+    opacity: .8; z-index: 0;
+  }
+  .hero .eyebrow { letter-spacing: .4em; font-size: 12px; color: var(--sunset); margin-bottom: 26px; position: relative; z-index: 2; }
+  .hero .subline { margin-top: 34px; color: var(--haze); font-size: 14px; position: relative; z-index: 2; }
+
+  .countdown { display: flex; gap: clamp(14px,4vw,36px); justify-content: center; position: relative; z-index: 2; }
+  .unit { text-align: center; }
+  .unit .val {
+    font-family: 'Big Shoulders Display', sans-serif; font-weight: 900;
+    font-size: clamp(3.2rem, 11vw, 7.5rem); line-height: 1; color: #FFF;
+    animation: pulseNeon 3.5s ease-in-out infinite;
+  }
+  .unit .lab { font-size: 12px; letter-spacing: .35em; color: var(--cyan); margin-top: 6px; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px clamp(16px,5vw,48px) 80px; }
+  .wire-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+  .wire-head h2 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: .06em; }
+  .live { color: var(--cyan); font-size: 14px; vertical-align: middle; }
+  #refresh {
+    background: transparent; color: var(--cyan); border: 1px solid var(--cyan);
+    padding: 8px 18px; border-radius: 999px; font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; cursor: pointer; letter-spacing: .1em;
+  }
+  #refresh:disabled { cursor: wait; opacity: .6; }
+  #updated { font-size: 12px; color: var(--haze); margin-bottom: 18px; }
+
+  article.item {
+    background: var(--card); border: 1px solid var(--edge); border-radius: 14px;
+    padding: 20px 22px; margin-bottom: 14px; animation: rise .5s ease both;
+    transition: transform .18s ease, border-color .18s ease;
+  }
+  article.item:hover { transform: translateY(-3px); border-color: var(--cyan); }
+  .meta { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+  .tag { font-size: 10px; font-weight: 700; letter-spacing: .2em; border-radius: 999px; padding: 3px 10px; }
+  .src { font-size: 12px; color: var(--haze); }
+  article.item h3 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: .03em; margin-bottom: 6px; }
+  article.item p { font-size: 14.5px; line-height: 1.6; color: #D8D3EE; }
+
+  .state { padding: 48px 0; text-align: center; }
+  .state .big { font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; letter-spacing: .2em; color: var(--flamingo); }
+  .state .sub { font-size: 13px; margin-top: 8px; color: var(--haze); }
+  .error-box { padding: 24px; border: 1px solid var(--flamingo); border-radius: 12px; color: #FF9AC5; }
+
+  footer { border-top: 1px solid var(--card); padding: 26px 16px; text-align: center; font-size: 12px; color: var(--haze); line-height: 1.8; }
+</style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="logo">VICE<span>WIRE</span></div>
+    <div class="tagline">UNOFFICIAL GTA VI TRACKER</div>
+  </header>
+
+  <section class="hero">
+    <div class="sun" aria-hidden="true"></div>
+    <p class="eyebrow">NOVEMBER 19, 2026 · PS5 &amp; XBOX SERIES X|S</p>
+    <div class="countdown" id="countdown"></div>
+    <p class="subline">until the biggest launch in entertainment history</p>
+  </section>
+
+  <main>
+    <div class="wire-head">
+      <h2>THE WIRE <span class="live">● LIVE</span></h2>
+      <button id="refresh">REFRESH</button>
+    </div>
+    <p id="updated" style="display:none;"></p>
+    <div id="feed">
+      <div class="state"><div class="big">LOADING THE WIRE…</div><div class="sub">pulling the latest GTA VI news</div></div>
+    </div>
+  </main>
+
+  <footer>
+    VICEWIRE is a fan-made tracker. Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive.<br />
+    News summaries are AI-paraphrased from public reporting — always check original sources before acting on rumors.
+  </footer>
+
+<script>
+  var LAUNCH = new Date('2026-11-19T00:00:00-05:00').getTime();
+  var TAG_COLOR = { OFFICIAL: '#00E5FF', NEWS: '#FFB347', RUMOR: '#FF2E88', BUSINESS: '#B9B3D9' };
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tickCountdown() {
+    var el = document.getElementById('countdown');
+    var t = LAUNCH - Date.now();
+    if (t <= 0) {
+      el.innerHTML = '<div class="unit"><div class="val" style="color:var(--flamingo)">IT\'S OUT.</div></div>';
+      return;
+    }
+    var d = Math.floor(t / 864e5);
+    var h = Math.floor(t / 36e5) % 24;
+    var m = Math.floor(t / 6e4) % 60;
+    var s = Math.floor(t / 1e3) % 60;
+    var units = [[d, 'DAYS'], [pad(h), 'HRS'], [pad(m), 'MIN'], [pad(s), 'SEC']];
+    el.innerHTML = units.map(function (u) {
+      return '<div class="unit"><div class="val">' + u[0] + '</div><div class="lab">' + u[1] + '</div></div>';
+    }).join('');
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function renderFeed(items) {
+    var feed = document.getElementById('feed');
+    if (!items || !items.length) {
+      feed.innerHTML = '<div class="state"><div class="big">NO STORIES YET</div><div class="sub">the feed updates a few times a day — check back soon</div></div>';
+      return;
+    }
+    feed.innerHTML = items.map(function (item, i) {
+      var color = TAG_COLOR[item.tag] || '#B9B3D9';
+      return '<article class="item" style="animation-delay:' + (i * 0.07) + 's">' +
+        '<div class="meta">' +
+          '<span class="tag" style="color:' + color + ';border:1px solid ' + color + '">' + escapeHtml(item.tag) + '</span>' +
+          '<span class="src">' + escapeHtml(item.source) + ' · ' + escapeHtml(item.date) + '</span>' +
+        '</div>' +
+        '<h3>' + escapeHtml(item.title) + '</h3>' +
+        '<p>' + escapeHtml(item.summary) + '</p>' +
+      '</article>';
+    }).join('');
+  }
+
+  function loadNews() {
+    var btn = document.getElementById('refresh');
+    var feed = document.getElementById('feed');
+    btn.disabled = true; btn.textContent = 'SCANNING…';
+    feed.innerHTML = '<div class="state"><div class="big">SCANNING THE WIRE…</div><div class="sub">loading the latest GTA VI news</div></div>';
+
+    fetch('/gta6-news.json?t=' + Date.now())
+      .then(function (r) { if (!r.ok) throw new Error('feed not ready'); return r.json(); })
+      .then(function (items) {
+        renderFeed(items);
+        var u = document.getElementById('updated');
+        u.style.display = 'block';
+        u.textContent = 'Updated ' + new Date().toLocaleTimeString();
+      })
+      .catch(function () {
+        feed.innerHTML = '<div class="error-box">The wire isn\'t ready yet. Once your news file is live, stories will show here. Tap refresh to retry.</div>';
+      })
+      .finally(function () {
+        btn.disabled = false; btn.textContent = 'REFRESH';
+      });
+  }
+
+  document.getElementById('refresh').addEventListener('click', loadNews);
+  loadNews();
+</script>
+</body>
+</html>
