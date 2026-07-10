@@ -1,0 +1,10 @@
+{
+  "name": "vice-wire",
+  "version": "1.0.0",
+  "description": "GTA 6 news tracker",
+  "scripts": {
+    "fetch-news": "node scripts/fetch-news.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
