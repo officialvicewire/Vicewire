@@ -122,6 +122,18 @@
   .disclosure { font-size: 11px; color: var(--haze); margin-top: 20px; line-height: 1.6; opacity: .8; }
 
   footer { border-top: 1px solid var(--card); padding: 26px 16px; text-align: center; font-size: 12px; color: var(--haze); line-height: 1.8; }
+
+  /* ── Social links ── */
+  .social { display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
+  .social a {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid var(--edge); color: var(--haze); text-decoration: none;
+    transition: transform .18s ease, border-color .18s ease, color .18s ease, background .18s ease;
+  }
+  .social a:hover { transform: translateY(-3px); border-color: var(--cyan); color: #fff; background: rgba(0,229,255,.08); }
+  .social a svg { width: 20px; height: 20px; fill: currentColor; }
+  .social-foot { margin-bottom: 20px; }
 </style>
 </head>
 <body>
@@ -180,6 +192,20 @@
   </section>
 
   <footer>
+    <div class="social social-foot">
+      <a href="PASTE_YOUR_TIKTOK_URL_HERE" target="_blank" rel="noopener" aria-label="TikTok" title="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M16.6 5.82a4.28 4.28 0 0 1-1.06-2.82h-3.3v12.83a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1 0-5.18c.27 0 .53.04.77.12v-3.36a5.9 5.9 0 0 0-.77-.05 5.94 5.94 0 1 0 5.94 5.94V9.4a7.5 7.5 0 0 0 4.35 1.39V7.5a4.28 4.28 0 0 1-3.34-1.68z"/></svg>
+      </a>
+      <a href="PASTE_YOUR_YOUTUBE_URL_HERE" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+        <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6z"/></svg>
+      </a>
+      <a href="PASTE_YOUR_INSTAGRAM_URL_HERE" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.4.37 1 .42 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.05 1.2-.25 1.8-.42 2.2-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.4.17-1 .37-2.2.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.05-1.8-.25-2.2-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.4-.37-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.05-1.2.25-1.8.42-2.2.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.4-.17 1-.37 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 1.98c-3.15 0-3.52.01-4.76.07-1.15.05-1.77.24-2.18.4-.55.22-.94.47-1.35.88-.41.41-.66.8-.88 1.35-.16.41-.35 1.03-.4 2.18-.06 1.24-.07 1.61-.07 4.76s.01 3.52.07 4.76c.05 1.15.24 1.77.4 2.18.22.55.47.94.88 1.35.41.41.8.66 1.35.88.41.16 1.03.35 2.18.4 1.24.06 1.61.07 4.76.07s3.52-.01 4.76-.07c1.15-.05 1.77-.24 2.18-.4.55-.22.94-.47 1.35-.88.41-.41.66-.8.88-1.35.16-.41.35-1.03.4-2.18.06-1.24.07-1.61.07-4.76s-.01-3.52-.07-4.76c-.05-1.15-.24-1.77-.4-2.18a3.6 3.6 0 0 0-.88-1.35 3.6 3.6 0 0 0-1.35-.88c-.41-.16-1.03-.35-2.18-.4-1.24-.06-1.61-.07-4.76-.07zm0 3.37a4.45 4.45 0 1 1 0 8.9 4.45 4.45 0 0 1 0-8.9zm0 7.34a2.89 2.89 0 1 0 0-5.78 2.89 2.89 0 0 0 0 5.78zm5.66-7.5a1.04 1.04 0 1 1-2.08 0 1.04 1.04 0 0 1 2.08 0z"/></svg>
+      </a>
+      <a href="PASTE_YOUR_TWITTER_URL_HERE" target="_blank" rel="noopener" aria-label="X (Twitter)" title="X">
+        <svg viewBox="0 0 24 24"><path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.66l7.73-8.84L1.24 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.01 4.13H5.04z"/></svg>
+      </a>
+    </div>
     VICEWIRE is a fan-made tracker. Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive.<br />
     News summaries are AI-paraphrased from public reporting — always check original sources before acting on rumors.
   </footer>
