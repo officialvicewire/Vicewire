@@ -1,37 +1,37 @@
 [
   {
-    "title": "Take-Two earnings call scheduled for August 7 with unusual morning timing",
-    "summary": "Take-Two Interactive announced their first quarterly earnings report following GTA 6 pre-orders will be released on August 7, 2026, before markets open. This marks an unusual departure from their typical after-market reports, with fans noting the last time they did this was during a Red Dead Redemption 2 delay announcement.",
-    "source": "RockstarINTEL",
+    "title": "Analysts Predict Third GTA 6 Trailer Coming in Late July or Early August",
+    "summary": "Industry experts are projecting that Rockstar will release the third GTA 6 trailer between late July and early August 2026, with timing potentially aligned with Take-Two's earnings call on August 7. The projection is based on historical marketing patterns from Red Dead Redemption 2 and GTA 5, which released their third trailers roughly four to six months before launch.",
+    "source": "Forbes",
     "date": "Jul 10, 2026",
-    "tag": "BUSINESS"
+    "tag": "NEWS"
   },
   {
-    "title": "GTA 6 preload date and physical edition details revealed",
-    "summary": "Rockstar confirmed that digital preloading for GTA 6 will begin on November 12, 2026, one week before the November 19 launch. Physical editions will also be available on the same date but will only contain download codes rather than discs, with the game unlocking on launch day.",
-    "source": "GameSpot",
-    "date": "Jul 10, 2026",
-    "tag": "OFFICIAL"
-  },
-  {
-    "title": "Fans speculate August 7 as GTA 6 Trailer 3 release date",
-    "summary": "Following Take-Two's announcement of their August 7 earnings call, GTA 6 community members are predicting the third trailer could arrive on or around that date. Some fans noted historical patterns showing Rockstar released trailers for GTA 5 and Red Dead Redemption 2 approximately two weeks before similar investor calls.",
+    "title": "Fans Speculate August 7 Reveal Date for GTA 6 Trailer",
+    "summary": "Grand Theft Auto fans believe August 7 will be crucial for the game's marketing push, as it coincides with Take-Two's quarterly earnings call. Some community members suggest there could be two trailers released before launch, with one being cinematic and another focused on gameplay footage that fans have yet to see.",
     "source": "Gaming Bible",
     "date": "Jul 10, 2026",
     "tag": "RUMOR"
   },
   {
-    "title": "Australian players will require ID verification to play GTA 6",
-    "summary": "Reports confirm that Australian players will need to verify their age using government-issued ID before accessing GTA 6 due to new online safety laws implemented in March 2026. Failure to comply could result in fines up to $49.5 million for Rockstar, though enforcement has been inconsistent across other platforms.",
-    "source": "MP1st",
-    "date": "Jul 9, 2026",
+    "title": "PlayStation's Digital-Only Backlash Rivals GTA 6 Social Media Attention",
+    "summary": "Public reaction to PlayStation's announcement of ending physical disc support in 2028 has generated social media engagement levels that rival GTA 6 discussions. The controversy centers around the impact on future releases including GTA 6, which will ship as a code-in-a-box rather than on physical media.",
+    "source": "DualShockers",
+    "date": "Jul 7, 2026",
     "tag": "NEWS"
   },
   {
-    "title": "Study reveals Australia's age verification system may not be enforced for GTA 6",
-    "summary": "Research shows that Australia's mandatory age verification laws are failing on social media platforms, with systems not activating despite regulations. Rockstar has built dormant verification code for GTA Online but has not yet activated it, raising questions about whether the checks will actually be enforced when GTA 6 launches.",
-    "source": "GTA BOOM",
-    "date": "Jul 9, 2026",
+    "title": "Rockstar Developers Move Toward Unionization Amid Crunch Period",
+    "summary": "Rockstar Games employees are taking steps to unionize ahead of GTA 6's November 19 launch, citing concerns over crunch culture and working conditions during the final development phase. The effort follows the controversial firing of 31 employees in 2025, with workers seeking protections on overtime, pay transparency, and flexible work arrangements through the IWGB union.",
+    "source": "Gaming Bible",
+    "date": "Jul 2, 2026",
+    "tag": "BUSINESS"
+  },
+  {
+    "title": "GTA 6 Physical Edition Controversy Continues Over Code-Only Release",
+    "summary": "The debate over GTA 6's physical edition continues as the game will only include a download code rather than a disc, marking the biggest AAA title to fully abandon physical media at launch. Critics argue this gives Sony and digital storefronts complete pricing control with no used game market or retail competition once physical discs phase out.",
+    "source": "XDA-Developers",
+    "date": "Jul 7, 2026",
     "tag": "NEWS"
   }
 ]
