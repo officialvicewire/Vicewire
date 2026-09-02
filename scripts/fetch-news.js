@@ -1,92 +1,129 @@
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 
 const NEWS_FILE = path.join(__dirname, '../public/gta6-news.json');
 
-async function fetchGTA6News() {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    console.error('ANTHROPIC_API_KEY not set');
-    process.exit(1);
-  }
+// Google News RSS aggregates IGN, GameSpot, Polygon, PC Gamer, Rockstar, etc.
+// into one reliable feed. Free, no API key, never runs out.
+const FEEDS = [
+  'https://news.google.com/rss/search?q=%22GTA%206%22%20OR%20%22Grand%20Theft%20Auto%20VI%22%20when%3A14d&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=%22GTA%206%22%20pre-order%20OR%20release%20when%3A30d&hl=en-US&gl=US&ceid=US:en',
+];
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
-        max_tokens: 2000,
-        messages: [
-          {
-            role: 'user',
-            content: `Search the web for the 5 most recent Grand Theft Auto 6 / GTA VI news items from the past 7 days.
-
-Return ONLY a raw JSON array (no markdown, no preamble). Each item must have exactly these fields:
-{
-  "title": "headline in your own words",
-  "summary": "2-3 sentences, fully paraphrased in your own words, never copied from the source",
-  "source": "publication name",
-  "date": "MMM D, YYYY format",
-  "tag": "one of: OFFICIAL, NEWS, RUMOR, BUSINESS"
+function httpGet(url) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (VICEWIRE news fetcher)' },
+    }, (res) => {
+      // follow one redirect if needed
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        return httpGet(res.headers.location).then(resolve).catch(reject);
+      }
+      let data = '';
+      res.on('data', (c) => (data += c));
+      res.on('end', () => resolve(data));
+    });
+    req.on('error', reject);
+    req.setTimeout(20000, () => { req.destroy(); reject(new Error('timeout')); });
+  });
 }
 
-Order newest first. Return ONLY the JSON array, nothing else.`,
-          },
-        ],
-        tools: [
-          {
-            type: 'web_search_20250305',
-            name: 'web_search',
-            max_uses: 5,
-          },
-        ],
-      }),
+function decode(str) {
+  if (!str) return '';
+  return str
+    .replace(/<!\[CDATA\[(.*?)\]\]>/gs, '$1')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&#x27;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/<[^>]+>/g, '')
+    .trim();
+}
+
+// Google News titles look like: "Headline - Publication"
+function splitTitle(raw) {
+  const t = decode(raw);
+  const idx = t.lastIndexOf(' - ');
+  if (idx > 0 && idx > t.length - 40) {
+    return { title: t.slice(0, idx).trim(), source: t.slice(idx + 3).trim() };
+  }
+  return { title: t, source: 'Google News' };
+}
+
+function tagFor(title) {
+  const t = title.toLowerCase();
+  if (t.includes('rockstar') || t.includes('official') || t.includes('trailer') || t.includes('confirms')) return 'OFFICIAL';
+  if (t.includes('rumor') || t.includes('rumour') || t.includes('leak') || t.includes('allegedly') || t.includes('reportedly')) return 'RUMOR';
+  if (t.includes('pre-order') || t.includes('preorder') || t.includes('sales') || t.includes('stock') || t.includes('price') || t.includes('take-two') || t.includes('shares')) return 'BUSINESS';
+  return 'NEWS';
+}
+
+function fmtDate(pubDate) {
+  const d = pubDate ? new Date(pubDate) : new Date();
+  if (isNaN(d)) return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function parseItems(xml) {
+  const items = [];
+  const blocks = xml.split(/<item>/).slice(1);
+  for (const b of blocks) {
+    const rawTitle = (b.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '';
+    const link = decode((b.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || '');
+    const pub = (b.match(/<pubDate>([\s\S]*?)<\/pubDate>/) || [])[1] || '';
+    const desc = decode((b.match(/<description>([\s\S]*?)<\/description>/) || [])[1] || '');
+    if (!rawTitle) continue;
+    const { title, source } = splitTitle(rawTitle);
+    if (!title) continue;
+    items.push({
+      title,
+      summary: desc ? desc.slice(0, 220) : `Reported by ${source}. Tap the source for the full story.`,
+      source,
+      date: fmtDate(pub),
+      tag: tagFor(title),
+      url: link,
+      _time: pub ? new Date(pub).getTime() || 0 : 0,
     });
+  }
+  return items;
+}
 
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(`API error: ${JSON.stringify(data.error)}`);
-    }
-
-    if (!data.content) {
-      throw new Error('No content in response');
-    }
-
-    let newsText = '';
-    for (const block of data.content) {
-      if (block.type === 'text') {
-        newsText += block.text;
+async function main() {
+  try {
+    console.log('Fetching GTA 6 news from RSS feeds...');
+    let all = [];
+    for (const feed of FEEDS) {
+      try {
+        const xml = await httpGet(feed);
+        all = all.concat(parseItems(xml));
+      } catch (e) {
+        console.log('One feed failed (continuing):', e.message);
       }
     }
 
-    const jsonMatch = newsText.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) {
-      throw new Error('No JSON array found in response');
+    if (!all.length) throw new Error('No items parsed from any feed');
+
+    // de-dupe by title, newest first, keep top 8
+    const seen = new Set();
+    const deduped = [];
+    all.sort((a, b) => b._time - a._time);
+    for (const it of all) {
+      const key = it.title.toLowerCase().slice(0, 60);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const { _time, ...clean } = it;
+      deduped.push(clean);
+      if (deduped.length >= 8) break;
     }
 
-    const newsArray = JSON.parse(jsonMatch[0]);
-
-    if (!Array.isArray(newsArray)) {
-      throw new Error('Response is not an array');
-    }
-
-    const outputDir = path.dirname(NEWS_FILE);
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
-
-    fs.writeFileSync(NEWS_FILE, JSON.stringify(newsArray, null, 2));
-    console.log(`Updated ${NEWS_FILE} with ${newsArray.length} items`);
-  } catch (error) {
-    console.error('Error fetching news:', error.message);
+    const outDir = path.dirname(NEWS_FILE);
+    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+    fs.writeFileSync(NEWS_FILE, JSON.stringify(deduped, null, 2));
+    console.log(`Updated ${NEWS_FILE} with ${deduped.length} items`);
+  } catch (err) {
+    console.error('Error fetching news:', err.message);
     process.exit(1);
   }
 }
 
-fetchGTA6News();
+main();
