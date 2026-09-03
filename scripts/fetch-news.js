@@ -88,6 +88,43 @@ function parseItems(xml) {
   return items;
 }
 
+const SITE_URL = 'https://vice-wire.com';
+const FEED_FILE = path.join(__dirname, '../public/feed.xml');
+
+function xmlEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function buildRss(items) {
+  const now = new Date().toUTCString();
+  const entries = items.map((it) => {
+    // Link back to the site so social clicks land on vice-wire.com (where the affiliate links live).
+    const link = SITE_URL + '/#wire';
+    const desc = `${it.summary} (Source: ${it.source})`;
+    return `    <item>
+      <title>${xmlEscape(it.title)}</title>
+      <link>${xmlEscape(link)}</link>
+      <guid isPermaLink="false">${xmlEscape(it.title.slice(0, 80) + '|' + it.date)}</guid>
+      <pubDate>${now}</pubDate>
+      <description>${xmlEscape(desc)}</description>
+    </item>`;
+  }).join('\n');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>VICEWIRE — GTA VI News</title>
+    <link>${SITE_URL}</link>
+    <description>The latest Grand Theft Auto VI news, tracked by VICEWIRE.</description>
+    <lastBuildDate>${now}</lastBuildDate>
+${entries}
+  </channel>
+</rss>
+`;
+}
+
 async function main() {
   try {
     console.log('Fetching GTA 6 news from RSS feeds...');
@@ -120,6 +157,10 @@ async function main() {
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
     fs.writeFileSync(NEWS_FILE, JSON.stringify(deduped, null, 2));
     console.log(`Updated ${NEWS_FILE} with ${deduped.length} items`);
+
+    // Also write an RSS feed so tools like Zapier/Buffer can auto-post, linking back to the site.
+    fs.writeFileSync(FEED_FILE, buildRss(deduped));
+    console.log(`Updated ${FEED_FILE} (RSS) with ${deduped.length} items`);
   } catch (err) {
     console.error('Error fetching news:', err.message);
     process.exit(1);
